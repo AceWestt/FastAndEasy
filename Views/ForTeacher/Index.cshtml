@@ -1,0 +1,242 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<script src="~/Scripts/paginathing.min.js"></script>
+@*@{ int? id = 0;
+    
+        var db = new FastAndEasy.Models.FastAndEasyEntities();
+        string fullName = null;
+        string userName = User.Identity.Name;
+        
+            //fullName = db.Teachers.Where(a => (a.Email.Equals(userName)) || (a.UserName.Equals(userName))).FirstOrDefault().LastName +
+            //    " " + db.Teachers.Where(a => (a.Email.Equals(userName)) || (a.UserName.Equals(userName))).FirstOrDefault().FirstName;
+            id = db.Teachers.Where(a => (a.UserName.Equals(userName)) || (a.Email.Equals(userName))).FirstOrDefault().Id;
+
+
+}*@
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        fillInGroupList('@ViewBag.Id');
+        $(".button.manage").click(function () {
+            $(".switchBox.teacher div").show();
+            $(".switchBox.teacher div:nth-child(1)").hide();
+
+        });
+    });
+    function fillInGroupList(id) {
+        $(".filter.b").empty();
+        $.ajax({
+            url: '@Url.Action("getGroups", "Reception")',
+            method: 'post',
+            dataType: 'json',
+            data: JSON.stringify({ "id": id }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $(data).each(function (index, item) {
+                    var groupName = item.Name.split(" ");
+                    $(".filter.b").append("<div>" + groupName[0] + "<br/>" + groupName[1] + " " + groupName[2] + "<span>" + item.Id + "</span>" + "</div>");
+                });
+                $(".filter.b").children().first().addClass("active");
+                $(".filter.b div").click(function () {
+                    $(".filter.b").children().each(function () {
+                        $(this).removeClass("active");
+                    });
+                    $(this).addClass("active");
+                    if ($(this).hasClass("plus")) {
+                        addNewGroup();
+                    }
+                    else {
+                        var id = $(this).children("span").html();
+                        groupTable(id);
+                    };
+
+                });
+            }
+        });
+    };
+    function groupTable(id) {
+        $(".groupContainer").empty();
+        $.ajax({
+            url: '@Url.Action("getGroup", "Reception")',
+            method: 'post',
+            dataType: 'json',
+            data: JSON.stringify({ "id": id }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                var i = 0;
+                $(".groupContainer").append("<table><tr><th>№</th><th>Full Name</th><th class='id'>Id</th></table>");
+                $(data).each(function (index, item) {
+                    i++;
+                    $(".groupContainer table").append("<tr>" +
+                        "<td>" + i + "</td>" +
+                        "<td>" + item.LastName + " " + item.FirstName + "</td>" +
+                        "<td class='id'>" + item.Id + "</td>" +
+                        "</tr>");
+                });
+                $(".groupContainer table tr td:nth-child(2)").click(function () {
+
+                    var n = $(this).children().first().html();
+                    var row = $(this).parent();
+                    var sId = row.find(".id").html();
+
+                    if (n != "№") {
+                        $(".studentManagement").remove();
+                        $(".attandenceContainer").remove();
+                        row.after("<tr class='attandenceContainer'><td colspan='3'>No Payment Yet</td></tr>");
+                        $.ajax({
+                            url: '@Url.Action("getAttendances", "Reception")',
+                            method: 'post',
+                            dataType: 'json',
+                            data: JSON.stringify({
+                                "id": sId
+                            }),
+                            contentType: "application/json; charset=utf-8",
+                            success: function (data) {
+
+                                if (data.count != 0) {
+                                    $(".attandenceContainer td").empty();
+                                    $(".attandenceContainer td").append("<table><thead><tr><th>№</th><th>Date</th><th>Attendance</th><th class='id'>Id</th></tr></thead><tbody></tbody></table>");
+                                    var i = 0;
+                                    $(data.attandances).each(function (index, item) {
+                                        i++;                                       
+                                        var date = item.Date;
+                                        if (date != null) {
+                                            
+                                            date = date.substr(6);
+                                            date = parseInt(date);
+                                            date = new Date(date);
+                                            var dd = date.getDate();
+                                            var mm = date.getMonth() + 1;
+                                            if (dd < 10) { dd = '0' + dd };
+                                            if (mm < 10) { mm = "0" + mm };
+                                            var yyyy = date.getFullYear();
+                                            date = dd + "." + mm + "." + yyyy;
+                                            alert(date)
+                                        };
+                                            $(".attandenceContainer td table tbody").append("<tr><td>" +
+                                               i + "</td><td>" + date + "</td><td>" + item.Present + "</td><td class='id'>" + item.Id + "</td></tr>");
+                                            if (i == 20) i = 0;
+                                        
+                                        
+                                    });
+                                    var table = ".attandenceContainer td table";
+                                    var tableBody = table + " tbody";
+                                    var tableRows = tableBody + " tr";
+                                    var tableColumn = table + " th";
+                                    $(tableBody).paginathing({
+                                        perPage: 20,
+                                        prevNext: true,
+                                        firstLast: true,
+                                        prevText: '&laquo;',
+                                        nextText: '&raquo;',
+                                        firstText: 'First',
+                                        lastText: 'Last',
+                                        containerClass: 'pagination-container',
+                                        ulClass: 'pagination',
+                                        insertAfter: $(table),
+                                        liClass: 'page',
+                                        activeClass: 'active',
+                                        disabledClass: 'disabled',
+                                    });
+                                    var x = $(".attandenceContainer td table").offset().top - 100;
+                                    $("html, body").animate({ scrollTop: x });
+                                    $(".attandenceContainer td table tbody tr td:nth-child(2)").click(function(){
+                                        if ($(this).html() == "null") {
+                                            $(this).empty();
+                                            $(this).append("<input name='date' type='date' value='@DateTime.Today' />");
+                                            var today = new Date();
+                                            var dd = today.getDate();
+                                            var mm = today.getMonth() + 1;
+                                            if (dd < 10) { dd = '0' + dd };
+                                            if (mm < 10) { mm = "0" + mm };
+                                            var yyyy = today.getFullYear();
+                                            today = yyyy + "-" + mm + "-" + dd;
+                                            $(this).find("input").val(today) ;
+                                        };
+                                    });
+                                    $(".attandenceContainer td table tbody tr td:nth-child(3)").click(function () {
+                                        if ($(this).html() == "null" && $(this).prev().html() != "null") {
+                                            $(this).empty();
+                                            $(this).append("+");
+                                            $(".saveButton").remove();
+                                            $(".cancelButton").remove();
+                                            $(".attandenceContainer td table").after("<div class='cancelButton'>Cancel</div>");
+                                            $(".attandenceContainer td table").after("<div class='saveButton'>Save</div>");                                           
+                                        }
+                                        else if ($(this).html() == "+" && $(this).prev().html() != "null") {
+                                            $(this).empty();
+                                            $(this).append("-");
+                                        }
+                                        else if ($(this).html() == "-" && $(this).prev().html() != "null") {
+                                            $(this).empty();
+                                            $(this).append("+");
+                                        };
+                                        $(".cancelButton").click(function () {
+                                            var i = $(".filter.b div.active span").html();                                            
+                                            groupTable(i);
+                                        });
+                                        $(".saveButton").click(function () {
+                                            $(".attandenceContainer td table tbody tr").each(function (index, item) {
+                                                var row = $(this);
+                                                if (row.children().first().next().html() != "null" && row.children().first().next().next().html() != "null") {
+                                                    var aDate = $(this).children().first().next().find("input").val();
+                                                    var id = row.children(".id").html();
+                                                    var presence = row.children().first().next().next().html();
+                                                    $.ajax({
+                                                        url: '@Url.Action("editAttendance", "ForTeacher")',
+                                                        method: 'post',
+                                                        dataType: 'json',
+                                                        data: JSON.stringify({
+                                                            "id": id,
+                                                            "presence": presence,
+                                                            "aDate" : aDate
+                                                        }),
+                                                        contentType: "application/json; charset=utf-8",
+                                                        success: function (data) {
+                                                            var i = $(".filter.b div.active span").html();
+                                                            groupTable(i);
+                                                        }
+                                                    });
+                                                }
+                                               
+                                            });
+                                        });
+                                    });
+                                    
+                                }
+                            }
+                        });
+                    };
+                });
+            }
+        });
+    };
+    </script>
+<div class="navigation reception">
+    <div class="filter b"></div>
+    <div class="switchBox teacher">
+        <div><div class="button manage">Manage</div></div>
+        <div><input name="date" type="date" value="@DateTime.Today" /></div> 
+        <div>
+            
+            <label class="switchTimetableBox teacher">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label>
+            <div class="button">Save</div>
+            <div class="button">Cancel</div>
+            
+        </div>
+    </div>
+    
+   
+            
+                   
+    
+</div>
+    
+<div class="groupContainer"></div>
+

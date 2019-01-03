@@ -1,0 +1,406 @@
+﻿
+@{
+    ViewBag.Title = "Reception";
+}
+<script src="~/Scripts/paginathing.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".switchBox div img").first().click(function () {
+            $(".switchBox").find("input").prop('checked', false);
+            groupAccordingToTeacher();
+        });
+        $(".switchBox div img").last().click(function () {
+            $(".switchBox").find("input").prop('checked', true);
+            groupAccordingToLevel();
+        });
+        $(".switchBox").find("input").change(function () {
+            if (this.checked) {
+                groupAccordingToLevel();
+            }
+            if (!this.checked) {
+                groupAccordingToTeacher();
+            }
+        });
+    });
+    function addNewGroup() {
+        $(".groupContainer").empty();
+        $(".groupContainer").append("<div class='newGroupForm'>" +
+            "<div class='label'>Select <span class='teacher'>the Teacher</span> and <span class='level'>the Level</span></div>"+
+            "<div class='select teacher'></div>" +
+            "<div class='select group'></div>" +
+            "<div class='label'>Input the Name of the Group</div>"+
+            "<input type='text' name='groupName' val=''/>" +
+            "<div class='saveButton'>Save</div><div class='cancelButton'>Cancel</div>" +
+            "</div>");
+        var teacherName;
+        var groupName;
+        $.ajax({
+            url: '@Url.Action("contentForNewGroup", "Reception")',
+            method: 'post',
+            dataType: 'json',            
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $(".select.teacher").empty();
+                $(".select.group").empty();
+                $(data.teachers).each(function (index, i) {                    
+                    $(".select.teacher").append("<div>"+
+                        "<span class='LastName'>" + i.LastName.substring(0, 1) + ".</span>" +
+                        " <span class='FirstName'>" + i.FirstName + "</span>" +
+                        "<span class='Id'>" + i.Id + "</span>" +
+                       "</div>");
+                });
+                $(data.levels).each(function (index, i) {
+                    $(".select.group").append("<div>" +
+                        "<span class='levelName'>" + i.Name + "</span>" +                        
+                        "<span class='Id'>" + i.Id + "</span>" +
+                       "</div>");
+                });
+                $(".select.teacher").children().first().addClass("active");
+                $(".select.group").children().first().addClass("active");
+                $(".select.teacher").children().click(function () {
+                    $(".select.teacher").children().removeClass("active");
+                    $(this).addClass("active");
+                    teacherName = $(this).children("span.LastName").text() + $(this).children("span.FirstName").text() + "\'s ";
+                    $(".newGroupForm input").val(teacherName + groupName);
+                });
+                $(".select.group").children().click(function () {
+                    $(".select.group").children().removeClass("active");
+                    $(this).addClass("active");
+                    groupName = $(this).children("span.levelName").text();
+                    $(".newGroupForm input").val(teacherName + groupName);
+                });
+
+            }
+        });
+    };
+    function groupAccordingToTeacher(){
+        $(".filter.a").empty();
+        $.ajax({
+            url: '@Url.Action("getTeachers", "Reception")',
+            method: 'post',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $(".filter.a").append("<div class='active'>" + "All" + "<br/>" + "Groups" + " " + "<span>" + "0" + "</span>" + "</div>");
+                fillInGroupList("0");
+                $(data).each(function (index, item) {
+                    $(".filter.a").append("<div>" + item.LastName + "<br/>" + item.FirstName + " " + "<span>" + item.Id + "</span>" + "</div>");
+                });
+                $(".filter.a div").click(function () {
+                    $(".filter.a div").each(function (index, item) {
+                        $(this).removeClass("active");
+                    });
+                    $(this).addClass("active");
+                    var id = $(this).children("span").html();
+                    fillInGroupList(id);
+                });
+            }
+        });
+    };
+    function fillInGroupList(id) {
+        $(".filter.b").empty();       
+        $.ajax({
+            url: '@Url.Action("getGroups", "Reception")',
+            method: 'post',
+            dataType: 'json',
+            data: JSON.stringify({ "id": id }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $(data).each(function (index, item) {
+                    var groupName = item.Name.split(" ");
+                    $(".filter.b").append("<div>" + groupName[0] + "<br/>" + groupName[1] + " " + groupName[2] + "<span>" + item.Id + "</span>" + "</div>");
+                });
+                $(".filter.b").append("<div class='plus'>New</br>Group</div>");
+                $(".filter.b").children().first().addClass("active");
+                $(".filter.b div").click(function () {
+                    $(".filter.b").children().each(function () {
+                        $(this).removeClass("active");
+                    });
+                    $(this).addClass("active");
+                    if ($(this).hasClass("plus")) {
+                        addNewGroup();
+                    }
+                    else {
+                        var id = $(this).children("span").html();
+                        groupTable(id);
+                    };
+                    
+                });
+            }
+        });
+    };
+    function fillInGroupListByLevel(id) {
+        $(".filter.b").empty();
+        $.ajax({
+            url: '@Url.Action("getGroupsByLevel", "Reception")',
+            method: 'post',
+            dataType: 'json',
+            data: JSON.stringify({ "id": id }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $(data).each(function (index, item) {
+                    var groupName = item.Name.split(" ");
+                    $(".filter.b").append("<div>" + groupName[0] + "<br/>" + groupName[1] + " " + groupName[2] + "<span>" + item.Id + "</span>" + "</div>");
+                });
+                $(".filter.b").children().first().addClass("active");
+                $(".filter.b").append("<div class='plus'>New</br>Group</div>");
+                $(".filter.b div").click(function () {
+                    $(".filter.b").children().each(function () {
+                        $(this).removeClass("active");
+                    });
+                    $(this).addClass("active");
+                    if ($(this).hasClass("plus")) {
+                        addNewGroup();
+                    }
+                    else {
+                        var id = $(this).children("span").html();
+                        groupTable(id);
+                    };
+                });
+            }
+        });
+    };
+    function groupTable(id) {
+        $(".groupContainer").empty();
+        $.ajax({
+            url: '@Url.Action("getGroup", "Reception")',
+            method: 'post',
+            dataType: 'json',
+            data: JSON.stringify({ "id": id }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                var i = 0;
+                $(".groupContainer").append("<table><tr><th>№</th><th>Full Name</th><th class='id'>Id</th><th>Tools</th></tr></table>");
+                $(data).each(function (index, item) {
+                    i++;
+                    $(".groupContainer table").append("<tr>" +
+                        "<td>" + i + "</td>" +
+                        "<td>" + item.LastName + " " + item.FirstName + "</td>" +
+                        "<td class='id'>" + item.Id + "</td>" +
+                        "<td><img class='paymentButton' src='/img/icons/payment.jpg'/><img class='editButton' src='/img/icons/edit.png'/><img class='deleteButton' src='/img/icons/delete.jpg'/></td>" +
+                        "</tr>");
+                });
+                $(".groupContainer table tr td .paymentButton").click(function () {
+                    var n = $(this).children().first().html();
+                    var row = $(this).parent().parent();
+                    var sId = row.find(".id").html();
+                    var groupId = $(".filter.b div.active span").html();
+                    
+                    if (n != "№") {
+                        $(".studentManagement").remove();
+                        $(".attandenceContainer").remove();
+                        row.after("<tr class='studentManagement'><td colspan='3'>" +
+                            "<div class='paymentField'><div>Amount:</div><input type='text' name='sum' value=''/></div>" +
+                            "<div class='pay payment'>Pay</div><div class='pay cancel'>Cancel</div>" +
+                            "</td></tr>");
+                        $(".pay.payment").click(function () {
+                            alert("w");
+                            $.ajax({
+                                url: '@Url.Action("studentPay", "Reception")',
+                                method: 'post',
+                                dataType: 'json',
+                                data: JSON.stringify({ "sId": sId,
+                                    "groupId": groupId,
+                                    "amount" : $(".paymentField input[name='sum']").val()
+                                }),
+                                contentType: "application/json; charset=utf-8",
+                                success: function (data) { groupTable(id);}
+                            });
+                        });
+                        $(".pay.cancel").click(function () {
+                            groupTable(id);
+                        });
+                    };
+                });
+                $(".groupContainer table tr td .editButton").click(function () {
+                    var n = $(this).children().first().html();
+                    var row = $(this).parent().parent();
+                    var sId = row.find(".id").html();
+                    
+                    if (n != "№") {
+                        $(".studentManagement").remove();
+                        $(".attandenceContainer").remove();
+                        row.after("<tr class='studentManagement'><td colspan='3'>" +
+                       "<div class='newStudent'>" +
+                   "<div class='newStudent label'>Last Name</div>" +
+                   "<div class='newStudent label'>First Name</div>" +
+                   "<input type='text' name='LastName'/>" +
+                   "<input type='text' name='FirstName'/>" +
+                   "<div class='saveButton'>Save</div><div class='cancelButton'>Cancel</div>" +
+                   "</div></td></tr>");
+                        $(".saveButton").click(function () {
+                            $.ajax({
+                                url: '@Url.Action("editStudent", "Reception")',
+                                method: 'post',
+                                dataType: 'json',
+                                data: JSON.stringify({
+                                    "id": sId,
+                                    "LastName": $(".newStudent input[name='LastName']").val(),
+                                    "FirstName": $(".newStudent input[name='FirstName']").val()
+                                }),
+                                contentType: "application/json; charset=utf-8",
+                                success: function (data) {
+                                    groupTable(id);
+                                }
+                            });
+                        });
+                        $(".cancelButton").click(function () {
+                            groupTable(id);
+                        });
+                    };
+                   
+                });
+                $(".groupContainer table tr td .deleteButton").click(function () {
+                    var n = $(this).children().first().html();
+                    var row = $(this).parent().parent();
+                    var sId = row.find(".id").html();
+                    if (n != "№") {
+                        $.ajax({
+                            url: '@Url.Action("deleteStudent", "Reception")',
+                            method: 'post',
+                            dataType: 'json',
+                            data: JSON.stringify({
+                                "id": sId                                
+                            }),
+                            contentType: "application/json; charset=utf-8",
+                            success: function (data) {
+                                groupTable(id);
+                            }
+                        });
+                    };
+                });
+                $(".groupContainer table tr td:nth-child(2)").click(function () {
+                    
+                    var n = $(this).children().first().html();
+                    var row = $(this).parent();
+                    var sId = row.find(".id").html();                   
+                    
+                    if (n != "№") {
+                        $(".studentManagement").remove();
+                        $(".attandenceContainer").remove();
+                        row.after("<tr class='attandenceContainer'><td colspan='3'>No Payment Yet</td></tr>");
+                        $.ajax({
+                            url: '@Url.Action("getAttendances", "Reception")',
+                            method: 'post',
+                            dataType: 'json',
+                            data: JSON.stringify({
+                                "id": sId
+                            }),
+                            contentType: "application/json; charset=utf-8",
+                            success: function (data) {
+                                
+                                if (data.count != 0) {
+                                    $(".attandenceContainer td").empty();
+                                    $(".attandenceContainer td").append("<table><thead><tr><th>№</th><th>Date</th><th>Attendance</th></tr></thead><tbody></tbody></table>");
+                                    var i = 0;
+                                    $(data.attandances).each(function (index, item) {
+                                        i++;
+                                        $(".attandenceContainer td table tbody").append("<tr><td>" +
+                                            i + "</td><td>" + item.Date + "</td><td>" + item.Present + "</td></tr>");
+                                        if (i == 20) i = 0;
+                                    });                                    
+                                    var table = ".attandenceContainer td table";
+                                    var tableBody = table + " tbody";
+                                    var tableRows = tableBody + " tr";
+                                    var tableColumn = table + " th";
+                                    $(tableBody).paginathing({
+                                        perPage: 20,
+                                        prevNext: true,
+                                        firstLast: true,
+                                        prevText: '&laquo;',
+                                        nextText: '&raquo;',
+                                        firstText: 'First',
+                                        lastText: 'Last',
+                                        containerClass: 'pagination-container',
+                                        ulClass: 'pagination',
+                                        insertAfter: $(table),
+                                        liClass: 'page',
+                                        activeClass: 'active',
+                                        disabledClass: 'disabled',                                        
+                                    });
+                                    
+                                }                                                                
+                            }
+                        });
+                    };
+
+                });
+                $(".groupContainer").append("<div class='add'>+</div>");
+                $(".add").click(function () {
+                    $(".newStudent").remove();
+                    $(".groupContainer").append("<div class='newStudent'>" +
+                        "<div class='newStudent label'>Last Name</div>" +
+                        "<div class='newStudent label'>First Name</div>" +
+                        "<input type='text' name='LastName'/>" +
+                        "<input type='text' name='FirstName'/>" +
+                        "<div class='saveButton'>Save</div><div class='cancelButton'>Cancel</div>" +
+                        "</div>");
+                    $(".saveButton").click(function () {
+                        $.ajax({
+                            url: '@Url.Action("addStudent", "Reception")',
+                            method: 'post',
+                            dataType: 'json',
+                            data: JSON.stringify({
+                                "id": id,
+                                "LastName": $(".newStudent input[name='LastName']").val(),
+                                "FirstName": $(".newStudent input[name='FirstName']").val()
+                            }),
+                            contentType: "application/json; charset=utf-8",
+                            success: function (data) {
+                                groupTable(id);
+                            }
+                        });
+                    });
+                    $(".cancelButton").click(function () {
+                        groupTable(id);
+                    });
+                });
+            }
+        });
+    };
+    function groupAccordingToLevel() {
+        $(".filter.a").empty();
+        $.ajax({
+            url: '@Url.Action("getLevels", "Reception")',
+            method: 'post',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $(".filter.a").append("<div class='level active'>" + "All" + "<br/>" + "Groups" + " " + "<span>" + "0" + "</span>" + "</div>");
+                fillInGroupListByLevel("0");
+                $(data).each(function (index, item) {
+                    $(".filter.a").append("<div class='level'>" + item.Name +"<br/>" + "Level" + "<span>" + item.Id + "</span>" + "</div>");
+                });
+                $(".filter.a div").click(function () {
+                    $(".filter.a div").each(function (index, item) {
+                        $(this).removeClass("active");
+                    });
+                    $(this).addClass("active");
+                    var id = $(this).children("span").html();
+                    fillInGroupListByLevel(id);
+                });
+            }
+        });
+    };
+</script>
+
+
+
+<div class="navigation reception">
+    <div class="switchBox">
+        <div>Filter Groups</div>
+        <div>
+            <img src="~/img/icons/switchTeacher.png" />
+            <label class="switchTimetableBox">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label>
+            <img src="~/img/icons/group.png" />
+        </div>
+    </div> 
+    <div class="filter a"></div>
+    <div class="filter b"></div>
+</div>
+<div class="groupContainer"></div>
+
+

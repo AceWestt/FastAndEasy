@@ -1,0 +1,667 @@
+﻿a{
+    font-style:normal;
+    text-decoration:none;
+}
+
+a:hover{
+    font-style:normal;
+}
+body {
+    width: 100%;
+    float: left;
+    margin:0;
+    padding:0;
+}
+
+*{
+    box-sizing: border-box;
+    min-height:0;
+}
+
+input[type=date]{
+    min-width:0;
+}
+/* Set padding to keep content from hitting the edges */
+.body-content, .mainContent.admin img, .receptionDivDetail img {
+    width: 100%;
+    float: left;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+footer{  
+     padding-top:15px;
+     padding-bottom:15px;
+     width: 100%;
+     float: left;          
+     text-align: center;   
+     background: rgb(111, 106, 106); 
+    width:100%;  
+}
+footer p{
+     color: white;
+     font-size: 1.3em;
+}
+
+h1, p{
+    float:left;
+font-size: 1.5em;
+text-align: center;
+height: 40px;
+width:100%;
+margin: 0;
+padding: 0;
+margin-top: 3px;
+color: rgb(111, 106, 106);
+}
+
+tr, td, th{
+    border:none;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+
+
+.text-danger{
+    color: red;
+}
+
+/*My Adjustments*/
+
+.accountControlcontainer{
+    right: 1%;    
+    width: 30px;
+    text-align: center;
+    border-radius: 30px;
+    border: red 1px solid;  
+    position: fixed;  
+    background:rgba(248, 28, 28, 0.5);
+    max-height:1000px;
+}
+.accountControlcontainer div, .accountControlcontainer div div {
+    width: 100%;
+    height: 30px;
+    margin-top: 5px;
+    border-radius: 50%;
+    border: red 1px solid; 
+    font-size: 1.2em;    
+    background:rgba(248, 28, 28, 0.5);
+    color: white;       
+}
+.accountControlcontainer div.controllerContainer{
+    height:auto;
+    border: none;
+    background: transparent;
+    display: none;
+}
+
+.accountControlcontainer div.controllerContainer a{
+    font-size: 0.9em;
+    color: white;
+}
+
+.accountControlcontainer div.gear, .accountControlcontainer div div.editProfile{
+    margin-top: 0;    
+}
+
+.attandenceContainer td table, div.attandenceContainer table{
+    background: white;
+    border-collapse: collapse;    
+}
+
+.attandenceContainer td table tr:nth-child(even) td, .attandenceContainer td table tr:nth-child(odd) td, div.attandenceContainer table tr td {
+    background: white;
+    border: 1px solid black;
+}
+div.attandenceContainer{
+    float:left;
+    width: 100%;
+    display: block;   
+    text-align:center; 
+}
+
+div.attandenceContainer table{
+    float: left;
+    width: 100%;
+}
+
+.add{
+    width: 100%;
+    float:left;
+    text-align: center;
+    height: 30px;
+    color: white;
+    background: rgb(15, 177, 23);
+    font-size: 1.7em;
+}
+.filter{
+    height: 40px;
+    float: left;
+    width: 100%;
+    border-bottom: 1px solid rgb(217, 217, 217);   
+    overflow: auto;
+    white-space: nowrap;    
+}
+
+.filter div{
+    display: inline-block;
+    border: 1px solid #fec51b;
+    height: 34px;
+    font-size: 0.7em;
+    margin: 2px 0 2px 5px;
+    padding: 0 6px 0 6px;
+    border-radius: 10px;    
+}
+
+.filter div.level{
+    border: 1px solid #f9972b;
+}
+
+.filter div.level.active{
+    color: white;
+    background:#f9972b;
+}
+
+.filter div.active{   
+    color: white;
+    background:#fec51b;
+}
+
+.filter.b div{
+    border: 1px solid #2196F3;
+} 
+
+.filter.b div.plus{
+    border: 1px solid rgb(15, 177, 23);
+}
+
+.filter.b div.plus.active{
+    background:rgb(15, 177, 23);
+}
+
+
+.filter.b div.active{   
+    color: white;
+    background:#2196F3;
+}
+
+.filter div span{
+    display: none;
+}
+
+.groupContainer table{
+    width: 100%;
+    float: left;
+    border: 1px solid green;
+    text-align: center;
+    border: 1px solid rgb(217, 217, 217);
+    
+}
+
+.groupContainer table tr:nth-child(odd){
+    background-color: #f2f2f2;
+}
+.groupContainer table tr:nth-child(even) td{
+    border: 1px solid #f2f2f2;
+}
+.groupContainer table tr td img{
+    height: 20px;
+    border-radius: 50%;
+    margin-top: 3px;
+    margin-left: 5px;
+    box-sizing:border-box;
+}
+.id{
+    display: none;
+}
+
+.loginForm{
+    float:left;    
+    width: 100%;
+}
+
+.loginLabel, .navigation, .newGroupForm .label{
+    color: rgb(111, 106, 106);
+    float: left;
+    width: 100%;
+    height: 30px;    
+    font-size:  1.3em;
+    background: rgb(250, 247, 247);
+    text-align: center;    
+    border-bottom: 1px solid rgb(217, 217, 217);    
+    padding-top: 2px;
+}
+
+.loginTextLabel{
+    width:100%;
+    float:left;
+    text-align: center;
+    font-size: 1.5em;     
+}
+
+.loginTextBox, .loginButton, .passwordTextBox{
+    width: 100%;
+    float:left;    
+    }
+
+.loginButton input[type=submit]{
+    background:#dd1717;
+    border:none;
+    color: white;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    height: 40px;
+}
+
+.loginTextBox input[type=text], .loginTextBox input[type=password], .loginButton input[type=button],
+.mainContent.admin input[type=text], .mainContent.admin input[type=password], .receptionDivDetail input[type=text],
+.receptionDivDetail input[type=password]
+{
+    min-width: 0;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    float: left;
+    height: 40px;
+    border: none;
+    padding-bottom: 0;
+    margin-bottom: 10px;
+    text-align:center;
+    background-color: transparent;
+    border-bottom: 1px #dd1717 solid;
+}
+
+
+.mainContent.admin input, .receptionDivDetail input {
+    width:100%;    
+}
+
+.newGroupForm{
+    width: 100%;
+    float: left;
+}
+
+.newGroupForm input{
+    width: 100%;
+    float:left;
+    height:30px;
+    text-align: center;
+}
+
+.newGroupForm .label{
+    background: rgb(250, 247, 247);
+}
+
+.newGroupForm .label span.teacher{
+    color: #fec51b;
+}
+
+.newGroupForm .label span.level{
+    color: #f9972b;
+}
+
+.newGroupForm .select{
+    width: 50%;
+    float: left;
+    height: 150px;    
+    overflow: auto;
+    white-space: nowrap;
+}
+.newGroupForm .select div{
+    height: 30px;
+    text-align:center;
+    padding-top: 5px;
+}
+
+.newGroupForm .select.teacher div{
+    border-bottom: 2px solid #fec51b; 
+}
+
+.newGroupForm .select.group div{
+    border-bottom: 2px solid #f9972b; 
+}
+
+.newGroupForm .select.teacher div.active{
+    background: #fec51b;
+    color: white;
+}
+.newGroupForm .select.group div.active{
+    background: #f9972b;
+    color: white;
+}
+
+.newGroupForm .select div span.Id{
+    display: none;
+}
+
+.newGroupForm .select.teacher{
+    border: 2px solid #fec51b;
+}
+
+.newGroupForm .select.group{
+    border: 2px solid #f9972b;
+}
+
+.newStudent{
+    width:100%;
+    float:left;
+}
+
+.newStudent.label, .newStudent input{
+    width:50%;
+    float:left;
+    text-align:center;
+    height: 25px;
+    font-size: 1.3em;
+    background: rgb(125, 242, 167);
+}
+.newStudent input{
+    background: white;
+    font-size: 1em;
+    width:50%;
+    box-sizing:border-box;
+    height: 30px;
+    border: solid 1px rgb(194, 194, 194);
+}
+
+
+.saveButton, .cancelButton, input[type=submit].saveButton{
+    width: 50%;
+    height: 30px;
+    text-align: center;
+    color: white;
+    padding-top: 8px;
+    font-size: 1.4em;
+    float:left;
+    border: none;
+}
+
+input[type=submit].saveButton, .cancelButton.edit{
+    height: 40px;
+    padding: 0;
+}
+
+.cancelButton.edit{
+    padding-top: 7px;
+    height: 33px;
+}
+
+.saveButton{
+    background: rgb(53, 241, 63);
+}
+
+.cancelButton{
+    background: rgb(255, 0, 0);
+}
+
+.loginTextBox input:focus{
+    border-bottom: 1px #dd1717 solid;
+}
+
+#logoBlock, #logoBlock img{
+    position: fixed;
+    float: left;
+    width: 100%;    
+}
+
+.mainContent.admin .editButton, .receptionDiv, .receptionDivDetail .editButton{
+    width: 100%;
+    float: left;
+    background: rgb(95, 201, 235);
+    color: white;
+    font-size: 1.7em;
+    text-align: center;
+    height: 40px;
+    padding-top: 5px;
+}
+
+.navigation{
+    height:auto;
+    border-bottom:none;
+}
+.navButton{
+    float: left;
+    width: 20%;
+    border-right: 1px solid rgb(217, 217, 217);
+    padding: 5px; 
+    border-bottom: 1px solid rgb(217, 217, 217);  
+}
+.navButton.right{
+    
+    border-right: none;
+}
+.navButton.active{
+    border-bottom: none;
+}
+.navButton img{
+    float: left;
+    width: 100%;          
+}
+
+.navSettings{
+    border-bottom: 1px solid rgb(217, 217, 217);
+    padding-top: 20px;
+}
+.pagination-container{
+    width: 100%;
+    float: left;
+     margin: 0;
+    padding: 0;    
+}
+.pagination{
+    float: left;
+    width: 100%;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;    
+}
+.pagination li{
+    float: left;
+    margin: 0;
+    padding: 0;    
+    width: 25%;
+    font-size: 1.5em;
+    background: black;    
+}
+.pagination li a{
+    color: white;
+}
+.pagination li a.disabled{
+    color: blue;
+    background: white;
+}
+.page{
+    display: none;
+}
+.receptionDiv{
+    background: rgb(73, 15, 125);
+}
+.receptionDiv span{
+    display: none;
+}
+.receptionDivDetail {
+    float: left;
+    width: 100%;    
+    height: auto;
+    display:none;
+    }
+.switchBox{
+      width: 100%;
+      float:left;  
+      border-bottom: 1px solid rgb(217, 217, 217);    
+  }
+.switchBox div{
+    width: 50%;
+    /*border: 1px solid green;*/
+    float:left;
+}
+
+  .switchBox div img{
+      height: 30px;
+      float:left;
+      cursor:pointer;
+  }
+
+  .switchTimetableBox {
+      float: left;
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 23px;
+  margin: 3px 1px 3px 1px;
+  /*margin: 5px 1px 5px 1px;*/
+}
+
+  .switchTimetableBox input {display:none;}
+
+  .slider {
+  position: absolute;
+  cursor:  pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fec51b;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+  .slider:before {
+  position: absolute;
+  content: "";
+  height: 15px;
+  width: 15px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+ .switchTimetableBox input:checked + .slider {
+  background-color: #f9972b;
+}
+
+.switchTimetableBox input:focus + .slider {
+  box-shadow: 0 0 1px #f9972b;
+}
+
+.switchTimetableBox input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+.switchBox.teacher div{
+    display:none;
+}
+
+.switchBox.teacher div div.button{
+    font-size: 1em;
+    float: left;
+    background: rgb(122, 212, 221);
+    width: auto;
+    height: 24px;
+    margin-top:3px;
+    margin-bottom:3px;
+    margin-left: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 10px;
+    color:white;
+}
+
+.switchBox.teacher div input[type=date]{
+    border-radius: 10px;
+    text-align: center;
+}
+
+.switchBox.teacher div:nth-child(1){
+    width:100%;
+    display:block;
+}
+.switchBox.teacher div:nth-child(2){
+    width:40%;
+}
+.switchBox.teacher div:nth-child(3){
+    width:60%;
+}
+
+.studentManagement td{
+    padding: 5px;     
+    width: 100%;      
+}
+
+.studentManagement td .paymentField{
+    width: 50%;
+    float: left;
+    height: 25px;    
+}
+ .studentManagement td .paymentField div{
+    width: 40%;
+    float:left;
+    height:25px;
+    
+}
+ .studentManagement td .paymentField input{
+     width: 60%;
+     float:left;
+     height: 25px;
+ }
+.studentManagement td .pay, .studentManagement td .pay.cancel{
+    margin-left: 1%;
+    width: 24%;
+    float: left;    
+    height: 25px;
+    background: rgb(77, 133, 247);
+    color: white;
+    border-radius: 5px;
+}
+
+.validationError{
+    color: red;
+    height: auto;
+    text-align:justify;
+    padding:10px;
+   font-size: 1.3em;
+}
+
+.warning{
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    color: red;
+    text-align:justify;
+    border: 1px solid red;
+    border-radius: 10px;
+    float: left;
+    padding: 5px;
+}
+
+
+
+
+
+
+
+
+
+

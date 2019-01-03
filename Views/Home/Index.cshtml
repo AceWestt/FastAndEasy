@@ -1,0 +1,36 @@
+﻿@model FastAndEasy.Models.LogOnModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+
+
+    
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="loginForm">            
+            <div class="loginLabel">Welcome</div>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="loginTextLabel">Login:</div>
+            <div class="loginTextBox">
+                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "" } })
+                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+            </div>
+            <div class="loginTextLabel">Password:</div>
+            <div class="loginTextBox">
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "" } })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+            <div class="loginButton">
+                <input type="submit" value="Log on" />
+            </div>
+            <div class="warning">
+                Dear Users. Please be aware that the application is working on testing mode. Numbers of functions are to be added and/or modified further. Thank you!
+            </div>
+
+        </div>
+    }

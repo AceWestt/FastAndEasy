@@ -1,0 +1,77 @@
+﻿@model FastAndEasy.Models.Student
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm("Edit", "Student", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="mainContent admin">
+        <h1>Please, fill in the form</h1>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <p>Last Name*</p>
+
+        @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "directorInputField" } })
+        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+
+
+
+        <p>First Name*</p>
+
+        @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "directorInputField" } })
+        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+
+
+
+        <p>Date of Birth*</p>
+
+        @Html.EditorFor(model => model.DoB, new { htmlAttributes = new { @type = "date", @class = "directorInputField" } })
+        @Html.ValidationMessageFor(model => model.DoB, "", new { @class = "text-danger" })
+
+
+
+        <p>Address*</p>
+
+        @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "directorInputField" } })
+        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+
+
+        <p>Mobile*</p>
+
+        @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "directorInputField" } })
+        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+
+
+
+        <p>Email*</p>
+
+        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "directorInputField" } })
+        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+
+
+        <p>Load Photo*</p>
+
+        <input type="file" name="ImageFile" id="teacherPhoto" />
+        <input type="submit" value="Save" class="saveButton" />
+        @if (User.Identity.IsAuthenticated)
+        {
+
+            var db = new FastAndEasy.Models.FastAndEasyEntities();
+
+            int id = 0;
+            string userName = User.Identity.Name;
+            var student = db.Students.FirstOrDefault(a=> a.UserName == userName|| a.Email == userName);
+
+            if (student != null)
+            {
+                id = db.Students.Where(a => (a.UserName.Equals(userName)) || (a.Email.Equals(userName))).FirstOrDefault().Id;
+                <a href="@Url.Action("Index", new { id = id })"><div class="cancelButton edit">Cancel</div></a>
+            }
+
+        }
+
+
+    </div>
+}

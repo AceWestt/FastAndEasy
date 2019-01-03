@@ -1,0 +1,167 @@
+﻿
+@{
+    ViewBag.Title = "IndexReception";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+
+            getReception();
+
+
+        function getReception() {
+            $(".mainContent.reception").empty();
+            $.ajax({
+                url: '@Url.Action("getReception", "Admin")',
+                method: 'post',
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $(data).each(function (index, item) {
+                        $(".mainContent.reception").append("<div class='receptionDiv'>" + item.LastName + " " + item.FirstName + " <span>" + item.Id + "</span></div>");
+                        $(".mainContent.reception").append("<div class='receptionDivDetail'>" +
+                            "<img src='" + item.ImagePath + "'>" +
+                            "<h1>Fullname</h1>" +
+                            "<p>" + item.LastName + " " + item.FirstName + "</p>" +
+                            "<h1>Username</h1>" +
+                            "<p>" + item.UserName + "</p>" +
+                            "<h1>Phone</h1>" +
+                            "<p>" + item.Phone + "</p>" +
+                            "<h1>Email</h1>" +
+                            "<p>" + item.Email + "</p>" +
+                            "<div class='editButton'>Edit</div>"+
+                            "</div>");                           
+                        });                   
+                    $(".receptionDiv").click(function () {                       
+                        //$(".receptionDivDetail").slideUp("slow");
+                        $(this).next(".receptionDivDetail").slideToggle("slow");
+
+                    });
+                    $(".mainContent.reception").append("<div class='add'>+</div>");
+                    $(".mainContent.reception").append("<div class='receptionDivDetail addNew'></div>");
+                    var block = $(".receptionDivDetail.addNew");
+                    block.append("<h1>Lastname</h1>");
+                    block.append("<input type='text' name='LastName' value=' '/>");
+                    block.append("<h1>Firstname</h1>");
+                    block.append("<input type='text' name='FirstName' value=' '/>");
+                    block.append("<h1>Username</h1>");
+                    block.append("<input type='text' name='UserName' value=' '/>");
+                    block.append("<h1>Password</h1>");
+                    block.append("<input type='Password' name='pass' value='1111'/>");
+                    block.append("<h1>Phone</h1>");
+                    block.append("<input type='text' name='Phone' value=' '/>");
+                    block.append("<h1>Email</h1>");
+                    block.append("<input type='text' name='Email' value=' '/>");
+                    block.append("<div class='saveButton addNew'>&radic;</div>");
+                    block.append("<div class='cancelButton addNew'>&times;</div>");
+                    $(".add").click(function () {
+                        //$(".receptionDivDetail").slideUp("slow");
+                        $(this).next(".receptionDivDetail.addNew").slideToggle("slow");
+                        var block = $(".receptionDivDetail.addNew");
+                        var x = block.css("top");
+                        $("html, body").animate({ scrollTop: x });
+                        $(".saveButton.addNew").click(function () {
+                            var b = $(this).parent();
+                            $.ajax({
+                                url: '@Url.Action("addNewReceptionist", "Admin")',
+                                method: 'post',
+                                dataType: 'json',
+                                data: JSON.stringify({
+                                    "LastName": b.children("input[name='LastName']").val(),
+                                    "FirstName": b.children("input[name='FirstName']").val(),
+                                    "UserName": b.children("input[name='UserName']").val(),
+                                    "pass": b.children("input[name='pass']").val(),
+                                    "Phone": b.children("input[name='Phone']").val(),
+                                    "Email": b.children("input[name='Email']").val()
+                                }),
+                                contentType: "application/json; charset=utf-8",
+                                success: function (data) { getReception(); },
+                                error: function (data) {
+
+                                }
+                            });
+                        });
+
+                        $(".cancelButton.addNew").click(function () {
+                            getReception();
+                        });
+                    });
+                    
+                    
+                    $(".editButton").click(function () {
+                        var id = $(this).parent().prev("div").children("span").html();
+                        var block = $(this).parent();                        
+                        $.ajax({
+                            url: '@Url.Action("getReceptionist", "Admin")',
+                            method: 'post',
+                            dataType: 'json',
+                            data: JSON.stringify({"id": id}),
+                            contentType: "application/json; charset=utf-8",
+                            success: function (data) {
+                                block.empty();
+                                block.append("<img src='" + data.ImagePath + "'>");
+                                block.append("<h1>Lastname</h1>");
+                                block.append("<input type='text' name='LastName' value='" + data.LastName + "'/>");
+                                block.append("<h1>Firstname</h1>");
+                                block.append("<input type='text' name='FirstName' value='" + data.FirstName + "'/>");
+                                block.append("<h1>Username</h1>");
+                                block.append("<input type='text' name='UserName' value='" + data.UserName + "'/>");
+                                block.append("<h1>Password</h1>");
+                                block.append("<input type='Password' name='pass' value='1111'/>");
+                                block.append("<h1>Phone</h1>");
+                                block.append("<input type='text' name='Phone' value='" + data.Phone + "'/>");
+                                block.append("<h1>Email</h1>");
+                                block.append("<input type='text' name='Email' value='" + data.Email + "'/>");
+                                block.append("<div class='saveButton'>&radic;</div>");
+                                block.append("<div class='cancelButton'>&times;</div>");
+                                var x = block.css("top");
+                                $("html, body").animate({ scrollTop: x });
+                                block.children(".saveButton").click(function () {
+                                    var i = $(this).parent().prev("div").children("span").html();
+                                    var b = $(this).parent();
+                                    $.ajax({
+                                        url: '@Url.Action("updateReceptionist", "Admin")',
+                                        method: 'post',
+                                        dataType: 'json',
+                                        data: JSON.stringify({"id": i,
+                                            "LastName": b.children("input[name='LastName']").val(),
+                                            "FirstName": b.children("input[name='FirstName']").val(),
+                                            "UserName": b.children("input[name='UserName']").val(),
+                                            "pass": b.children("input[name='pass']").val(),
+                                            "Phone": b.children("input[name='Phone']").val(),
+                                            "Email": b.children("input[name='Email']").val()                                        
+                                        }),
+                                        contentType: "application/json; charset=utf-8",
+                                        success: function (data) { getReception(); },
+                                        error: function(data){
+                                            
+                                        }
+                                    });
+                                });
+                                block.children(".cancelButton").click(function () { getReception(); });
+                            },
+                            error: function(data){
+
+                            }
+                        });
+                    });                   
+                   
+                                },
+                                error: function (data) {
+
+                                }
+                            });
+                 
+        };
+    });
+</script>
+
+<div class="navigation">
+    <div class="navButton"><a href="@Url.Action("Index")"><img id="managerNavIcon" src="~/img/icons/manager.png" /></a></div>
+    <div class="navButton active"><a href="@Url.Action("IndexReception")"><img id="receptionNavIcon" src="~/img/icons/reception.png" /></a></div>
+    <div class="navButton"><a href="@Url.Action("IndexTeacher")"><img id="teacherNavIcon" src="~/img/icons/manager.png" /></a></div>
+    <div class="navButton"><a href="@Url.Action("IndexGroup")"><img id="groupNavIcon" src="~/img/icons/manager.png" /></a></div>
+    <div class="navButton right"><a href="@Url.Action("IndexStudent")"><img id="studentNavIcon" src="~/img/icons/manager.png" /></a></div>
+</div>
+<div class="loginLabel">Reception</div>
+<div class="mainContent reception"></div>
+

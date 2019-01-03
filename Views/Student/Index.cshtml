@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<script src="~/Scripts/paginathing.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Action("getAttendances", "Reception")',
+            method: 'post',
+            dataType: 'json',
+            data: JSON.stringify({
+                "id": @ViewBag.Id
+            }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                if (data.count != 0) {
+                    $(".attandenceContainer").empty();
+                    $(".attandenceContainer").append("<table><thead><tr><th>№</th><th>Date</th><th>Attendance</th><th class='id'>Id</th></tr></thead><tbody></tbody></table>");
+                    var i = 0;
+                    $(data.attandances).each(function (index, item) {
+                        i++;
+                        var date = item.Date;
+                        if (date != null) {
+
+                            date = date.substr(6);
+                            date = parseInt(date);
+                            date = new Date(date);
+                            var dd = date.getDate();
+                            var mm = date.getMonth() + 1;
+                            if (dd < 10) { dd = '0' + dd };
+                            if (mm < 10) { mm = "0" + mm };
+                            var yyyy = date.getFullYear();
+                            date = dd + "." + mm + "." + yyyy;
+                            alert(date)
+                        };
+                        $(".attandenceContainer table tbody").append("<tr><td>" +
+                           i + "</td><td>" + date + "</td><td>" + item.Present + "</td><td class='id'>" + item.Id + "</td></tr>");
+                        if (i == 20) i = 0;
+
+
+                    });
+                    var table = ".attandenceContainer table";
+                    var tableBody = table + " tbody";
+                    var tableRows = tableBody + " tr";
+                    var tableColumn = table + " th";
+                    $(tableBody).paginathing({
+                        perPage: 20,
+                        prevNext: true,
+                        firstLast: true,
+                        prevText: '&laquo;',
+                        nextText: '&raquo;',
+                        firstText: 'First',
+                        lastText: 'Last',
+                        containerClass: 'pagination-container',
+                        ulClass: 'pagination',
+                        insertAfter: $(".attandenceContainer table"),
+                        liClass: 'page',
+                        activeClass: 'active',
+                        disabledClass: 'disabled',
+                    });                    
+                    
+
+                }
+            }
+        });
+    });
+
+</script>
+<div class="attandenceContainer"></div>
+
+

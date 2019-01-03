@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    @Scripts.Render("~/bundles/jquery")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var paddingTop = $("#logoBlock img").css("height");
+            $(".body-content").css({ "paddingTop": paddingTop });
+            $(".accountControlcontainer").css({ "top": paddingTop });
+            $(".gear").click(function () {
+                $(".controllerContainer").stop().slideToggle("slow");
+            });
+        });
+    </script>  
+   <div id="logoBlock"><img src="~/img/logo/logo.png" /></div>
+    @if (User.Identity.IsAuthenticated)
+    {
+
+        var db = new FastAndEasy.Models.FastAndEasyEntities();
+
+        int id = 0;
+        string userName = User.Identity.Name;
+        var reception = db.Receptions.FirstOrDefault(a => a.UserName == userName || a.Email == userName);
+        var teacher = db.Teachers.FirstOrDefault(a => a.UserName == userName || a.Email == userName);
+        var student = db.Students.FirstOrDefault(a => a.UserName == userName || a.Email == userName);
+
+        if (reception != null)
+        {
+            id = db.Receptions.Where(a => (a.UserName.Equals(userName)) || (a.Email.Equals(userName))).FirstOrDefault().Id;
+            <div class="accountControlcontainer">
+                <div class="gear">&#9881</div>
+                <div class="controllerContainer">
+                    <a href="@Url.Action("Edit", "Reception", new { id = id})"><div class="editProfile">&#9881</div></a>
+                    <a href="@Url.Action("EditPassword", "Reception", new { id = id})"><div class="editPassword">&#9881</div></a>
+                    <a href="@Url.Action("LogOff", "Home", new { id = id})"><div class="logOff">&#9881</div></a> 
+                </div>                
+            </div>
+        }
+
+        else if (teacher != null)
+        {
+            id = db.Teachers.Where(a => (a.UserName.Equals(userName)) || (a.Email.Equals(userName))).FirstOrDefault().Id;
+            <div class="accountControlcontainer">
+                <div class="gear">&#9881</div>
+                <div class="controllerContainer">
+                    <a href="@Url.Action("Edit", "ForTeacher", new { id = id})"><div class="editProfile">&#9881</div></a>
+                    <a href="@Url.Action("EditPassword", "ForTeacher", new { id = id})"><div class="editPassword">&#9881</div></a>
+                    <a href="@Url.Action("LogOff", "Home", new { id = id})"><div class="logOff">&#9881</div></a>
+                </div>
+            </div>
+        }
+
+        else if (student != null)
+        {
+            id = db.Students.Where(a => (a.UserName.Equals(userName)) || (a.Email.Equals(userName))).FirstOrDefault().Id;
+            <div class="accountControlcontainer">
+                <div class="gear">&#9881</div>
+                <div class="controllerContainer">
+                    <a href="@Url.Action("Edit", "Student", new { id = id})"><div class="editProfile">&#9881</div></a>
+                    <a href="@Url.Action("EditPassword", "Student", new { id = id})"><div class="editPassword">&#9881</div></a>
+                    <a href="@Url.Action("LogOff", "Home", new { id = id})"><div class="logOff">&#9881</div></a>
+                </div>
+            </div>
+        }
+    }
+   
+    <div class="body-content">
+        @RenderBody()
+        
+        <footer>            
+            <p>&copy; @DateTime.Now.Year - AceWestt</p>
+        </footer>
+    </div>
+
+     
+    @RenderSection("scripts", required: false)
+</body>
+</html>

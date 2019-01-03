@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8c9cd8f408674f85acc2d85d6fa6d6fa" Name="Diagram1">
+        <EntityTypeShape EntityType="FastAndEasyModel.Admin" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="FastAndEasyModel.Assessment" Width="1.5" PointX="10.25" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="FastAndEasyModel.Attendence" Width="1.5" PointX="10.25" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="FastAndEasyModel.Group" Width="1.5" PointX="5.25" PointY="24.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="FastAndEasyModel.Level" Width="1.5" PointX="3" PointY="20.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="FastAndEasyModel.Manager" Width="1.5" PointX="3" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="FastAndEasyModel.Payment" Width="1.5" PointX="5.25" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="FastAndEasyModel.Reception" Width="1.5" PointX="3" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="FastAndEasyModel.Role" Width="1.5" PointX="0.75" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="FastAndEasyModel.Student" Width="1.5" PointX="8" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="FastAndEasyModel.Teacher" Width="1.5" PointX="3" PointY="23.625" IsExpanded="true" />
+        <AssociationConnector Association="FastAndEasyModel.FK_Admins_Roles" ManuallyRouted="false" />
+        <AssociationConnector Association="FastAndEasyModel.FK_Assessment_Students" ManuallyRouted="false" />
+        <AssociationConnector Association="FastAndEasyModel.FK_Attendence_Students" ManuallyRouted="false" />
+        <AssociationConnector Association="FastAndEasyModel.FK_Groups_Level" ManuallyRouted="false" />
+        <AssociationConnector Association="FastAndEasyModel.FK_Groups_Teachers" ManuallyRouted="false" />
+        <AssociationConnector Association="FastAndEasyModel.FK_Students_Groups" ManuallyRouted="false" />
+        <AssociationConnector Association="FastAndEasyModel.FK_Managers_Roles" ManuallyRouted="false" />
+        <AssociationConnector Association="FastAndEasyModel.FK_Payment_Managers" ManuallyRouted="false" />
+        <AssociationConnector Association="FastAndEasyModel.FK_Payment_Reception" ManuallyRouted="false" />
+        <AssociationConnector Association="FastAndEasyModel.FK_Payment_Students" ManuallyRouted="false" />
+        <AssociationConnector Association="FastAndEasyModel.FK_Reception_Roles" ManuallyRouted="false" />
+        <AssociationConnector Association="FastAndEasyModel.FK_Students_Roles" ManuallyRouted="false" />
+        <AssociationConnector Association="FastAndEasyModel.FK_Teachers_Roles" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

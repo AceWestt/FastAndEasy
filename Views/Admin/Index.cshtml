@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "TheBossesPage";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+
+            getManager();
+
+
+        function getManager() {
+            $(".mainContent.admin").empty();
+            $.ajax({
+                url: '@Url.Action("getManager", "Admin")',
+                method: 'post',
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $(".mainContent.admin").append("<img src='" + data.ImagePath + "'>");
+                    $(".mainContent.admin").append("<h1>Fullname</h1>");
+                    $(".mainContent.admin").append("<p>" + data.LastName + " " + data.FirstName + "</p>");
+                    $(".mainContent.admin").append("<h1>Username</h1>");
+                    $(".mainContent.admin").append("<p>" + data.UserName + "</p>");
+                    $(".mainContent.admin").append("<h1>Phone</h1>");
+                    $(".mainContent.admin").append("<p>" + data.Phone + "</p>");
+                    $(".mainContent.admin").append("<h1>Email</h1>");
+                    $(".mainContent.admin").append("<p>" + data.Email + "</p>");
+                    $(".mainContent.admin").append("<div class='editButton'>Edit</div>");
+                    $(".mainContent.admin .editButton").click(function () {
+                        $(".mainContent.admin").empty();
+                        $(".mainContent.admin").append("<img src='" + data.ImagePath + "'>");
+                        $(".mainContent.admin").append("<h1>Lastname</h1>");
+                        $(".mainContent.admin").append("<input type='text' name='LastName' value='" + data.LastName + "'/>");                       
+                        $(".mainContent.admin").append("<h1>Firstname</h1>");
+                        $(".mainContent.admin").append("<input type='text' name='FirstName' value='" + data.FirstName + "'/>");
+                        $(".mainContent.admin").append("<h1>Username</h1>");
+                        $(".mainContent.admin").append("<input type='text' name='UserName' value='" + data.UserName + "'/>");
+                        $(".mainContent.admin").append("<h1>Password</h1>");
+                        $(".mainContent.admin").append("<input type='Password' name='pass' value='1111'/>");
+                        $(".mainContent.admin").append("<h1>Phone</h1>");
+                        $(".mainContent.admin").append("<input type='text' name='Phone' value='"+data.Phone+"'/>");
+                        $(".mainContent.admin").append("<h1>Email</h1>");
+                        $(".mainContent.admin").append("<input type='text' name='Email' value='" + data.Email + "'/>");
+                        $(".mainContent.admin").append("<div class='saveButton'>&radic;</div>");
+                        $(".mainContent.admin").append("<div class='cancelButton'>&times;</div>");
+                        $("html, body").animate({ scrollTop: '0px' });
+                        $(".mainContent.admin .cancelButton").click(function () {
+                            getManager();
+                        });
+                        $(".mainContent.admin .saveButton").click(function () {
+                            $.ajax({
+                                url: '@Url.Action("editManager", "Admin")',
+                                method: 'post',
+                                data: JSON.stringify({
+                                    "LastName": $(".mainContent.admin input[name='LastName']").val(),
+                                    "FirstName": $(".mainContent.admin input[name='FirstName']").val(),
+                                    "UserName": $(".mainContent.admin input[name='UserName']").val(),
+                                    "pass": $(".mainContent.admin input[name='pass']").val(),
+                                    "Phone": $(".mainContent.admin input[name='Phone']").val(),
+                                    "Email": $(".mainContent.admin input[name='Email']").val()
+                                }),
+                                dataType: 'json',
+                                contentType: "application/json; charset=utf-8",
+                                success: function (data) {
+                                    if(data == "success"){
+                                        getManager();
+                                    }
+                                    else {
+                                        $(".validationError").remove();
+                                        $(".mainContent.admin input[name='LastName']").after("<p class='validationError'>" +
+                                            data.LNameError + "</p>");
+                                        $(".mainContent.admin input[name='FirstName']").after("<p class='validationError'>" +
+                                            data.FNameError + "</p>");
+                                        $(".mainContent.admin input[name='UserName']").after("<p class='validationError'>" +
+                                            data.UserNameError + "</p>");
+                                        $(".mainContent.admin input[name='pass']").after("<p class='validationError'>" +
+                                            data.PassError + "</p>");
+                                        $(".mainContent.admin input[name='Phone']").after("<p class='validationError'>" +
+                                            data.PhoneError + "</p>");
+                                        $(".mainContent.admin input[name='Email']").after("<p class='validationError'>" +
+                                           data.EmailError + "</p>");                                        
+                                    }
+                                },
+                                error: function (data) {
+
+                                }
+                            });
+                        });
+                    });
+
+                },
+                error: function (data) {
+
+                }
+            });
+        };
+    });
+</script>
+<div class="navigation">
+    <div class="navButton active"><a href="@Url.Action("Index")"><img id="managerNavIcon" src="~/img/icons/manager.png" /></a></div>
+    <div class="navButton"><a href="@Url.Action("IndexReception")"><img id="receptionNavIcon" src="~/img/icons/reception.png" /></a></div>
+    <div class="navButton"><a href="@Url.Action("IndexTeacher")"><img id="teacherNavIcon" src="~/img/icons/manager.png" /></a></div>
+    <div class="navButton"><a href="@Url.Action("IndexGroup")"><img id="groupNavIcon" src="~/img/icons/manager.png" /></a></div>
+    <div class="navButton right"><a href="@Url.Action("IndexStudent")"><img id="studentNavIcon" src="~/img/icons/manager.png" /></a></div>
+</div>
+<div class="loginLabel">Manager</div>
+<div class="mainContent admin"></div>
